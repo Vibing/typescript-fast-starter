@@ -1,20 +1,19 @@
-
 `typescript`现在很火，本项目基于`typescript`，使用最新版本的依赖搭建开发环境。
-
 
 项目基于最新的`webpack`4.x、`babel`7.x、`typescript`3.x
 
 ## 依赖介绍
+
 很多人`webpack`不陌生，但对于自己的项目依赖不知道是干嘛的。
 这里对项目依赖进行阐述，帮助你理解你的环境。
 
-```json
+```javascript
 //注意：以下依赖是必需的
-{   
+{
     /*
     Babel 自带了一个内置的 CLI 命令行工具，可通过命令行编译文件。
     */
-    "@babel/cli": "^7.4.3", 
+    "@babel/cli": "^7.4.3",
     /*
     看到`core`就知道它是`babel`的核心，一些转码操作都是基于它完成的,
     所以它是必须的依赖。
@@ -37,7 +36,7 @@
     */
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     /*
-    Babel默认只转换新的JavaScript语法，但是不转换新的API，比如 
+    Babel默认只转换新的JavaScript语法，但是不转换新的API，比如
     `Iterator`、`Generator`、`Set`、`Maps`、`Proxy`、`Reflect`、
     `Symbol`、`Promise` 等全局对象，以及一些定义在全局对象上的方法（比
     如 `Object.assign` ）都不会转码。而`@babel/polyfill`就可以做到。
@@ -89,9 +88,10 @@
   }
 ```
 
-##### 以上只介绍`ES6+typescript`环境的必需依赖，也是最最最重要的部分。但源码中也包含了对html、less的处理，如果你的项目需要其他依赖，比如：`样式、图片、字体`，请自行安装你想要的loader或插件
+##### 以上只介绍`ES6+typescript`环境的必需依赖，也是最最最重要的部分。但源码中也包含了对 html、less 的处理，如果你的项目需要其他依赖，比如：`样式、图片、字体`，请自行安装你想要的 loader 或插件
 
 #### 项目使用
+
 ```
 //安装依赖
 npm install
@@ -99,7 +99,9 @@ npm install
 npm run start
 //在浏览器中打开：localhost:8080
 ```
+
 #### 打包
+
 ```
 npm run build
 ```
