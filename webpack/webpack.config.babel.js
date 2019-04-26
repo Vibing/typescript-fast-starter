@@ -1,13 +1,11 @@
 import webpack from 'webpack';
-// const webpack = require('webpack');
+import path from 'path';
+import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import AddAssetHtmlPlugin from 'add-asset-html-webpack-plugin';
+import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 
-const path = require('path');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-
-module.exports = {
+export default {
   mode: 'development',
   entry: {
     app: path.resolve(__dirname, '../src/index.ts')
