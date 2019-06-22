@@ -8,7 +8,7 @@ import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
 export default {
   mode: 'development',
   entry: {
-    app: path.resolve(__dirname, '../src/index.ts')
+    app: path.resolve(__dirname, '../src/index.tsx')
   },
   devtool: 'cheap-module-source-map',
   output: {
@@ -82,7 +82,8 @@ export default {
       canPrint: true
     }),
     new webpack.DefinePlugin({
-      __DEV__: true
+      __DEV__: true,
+      __BASE_URL__: JSON.stringify('http://127.0.0.1:8080/')
     }),
     // new webpack.DllReferencePlugin({
     //   context: __dirname,
@@ -108,7 +109,7 @@ export default {
     })
   ],
   devServer: {
-    port: 8080,
+    port: 8899,
     host: '0.0.0.0',
     disableHostCheck: true
   }
