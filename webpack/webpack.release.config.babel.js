@@ -114,10 +114,10 @@ export default {
         title: 'test'
       }
     }),
-    // new webpack.DllReferencePlugin({
-    //   context: __dirname,
-    //   manifest: require('./dll/vendor-manifest.json')
-    // }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require('../dll/vendor-manifest.json')
+    }),
     new WebpackBar()
   ]
 };

@@ -45,6 +45,24 @@ export default {
             loader: 'css-loader'
           },
           {
+            loader: 'less-loader?sourceMap=true',
+            options: {
+              javascriptEnabled: true
+            }
+          }
+        ],
+        include: path.resolve(__dirname, '../node_modules/antd')
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
             loader: 'less-loader',
             options: {
               javascriptEnabled: true
@@ -81,29 +99,30 @@ export default {
       },
       canPrint: true
     }),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/),
     new webpack.DefinePlugin({
       __DEV__: true,
       __BASE_URL__: JSON.stringify('http://127.0.0.1:8080/')
     }),
-    // new webpack.DllReferencePlugin({
-    //   context: __dirname,
-    //   manifest: require('./dll/vendor-manifest.json')
-    // }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require('../dll/vendor-manifest.json')
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../src/index.ejs'),
       templateParameters: {
         title: 'test'
       }
     }),
-    // new AddAssetHtmlPlugin([
-    //   {
-    //     // 要添加到编译中的文件的绝对路径，以及生成的HTML文件。支持 globby 字符串
-    //     filepath: require.resolve('./dll/vendor.dll.js'),
-    //     attributes: {
-    //       defer: true
-    //     }
-    //   }
-    // ]),
+    new AddAssetHtmlPlugin([
+      {
+        // 要添加到编译中的文件的绝对路径，以及生成的HTML文件。支持 globby 字符串
+        filepath: require.resolve('../dll/vendor.dll.js'),
+        attributes: {
+          defer: true
+        }
+      }
+    ]),
     new ScriptExtHtmlWebpackPlugin({
       defer: ['app']
     })
