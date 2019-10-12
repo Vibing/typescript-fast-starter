@@ -7,8 +7,8 @@ import WebpackBar from 'webpackbar';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 export default {
-  mode: 'production',
-  entry: path.resolve(__dirname, '../src/index.ts'),
+  mode: 'development',
+  entry: path.resolve(__dirname, '../src/index.tsx'),
   output: {
     path: path.resolve(__dirname, `../dist/release`),
     filename: 'bundle-[name]-[hash].js',
@@ -66,27 +66,27 @@ export default {
       }
     ]
   },
-  optimization: {
-    nodeEnv: 'production',
-    mergeDuplicateChunks: true, //合并包含相同模块的块
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        parallel: true,
-        extractComments: true
-      })
-    ],
-    splitChunks: {
-      cacheGroups: {
-        styles: {
-          name: 'styles',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true
-        }
-      }
-    }
-  },
+  // optimization: {
+  //   nodeEnv: 'production',
+  //   mergeDuplicateChunks: true, //合并包含相同模块的块
+  //   minimize: true,
+  //   minimizer: [
+  //     new TerserPlugin({
+  //       parallel: true,
+  //       extractComments: true
+  //     })
+  //   ],
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       styles: {
+  //         name: 'styles',
+  //         test: /\.css$/,
+  //         chunks: 'all',
+  //         enforce: true
+  //       }
+  //     }
+  //   }
+  // },
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'bundle-[name]-[hash].css'
