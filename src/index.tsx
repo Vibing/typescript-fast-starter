@@ -10,6 +10,22 @@ import {
 import loadable from 'react-loadable';
 import Layout from './pages/layout';
 import routes from './routes';
+import axios from 'axios';
+
+/* axios公共配置 */
+axios.defaults.baseURL = 'http://localhost:8080/'; //请求baseUrl
+axios.defaults.timeout = 60000; //设置超时时间
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.post['Content-Type'] =
+  'application/x-www-form-urlencoded';
+
+//response拦截器
+axios.interceptors.response.use(
+  response => response.data,
+  error => {
+    return Promise.reject(error);
+  }
+);
 
 export default class App extends Component {
   render() {
