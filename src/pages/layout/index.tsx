@@ -1,8 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
+// import SideMenu from './components/menu';
 
 const { Header, Content, Footer, Sider } = Layout;
+
+const menuData = [
+  {
+    name: 'AA管理',
+    icon: 'user',
+    key: 'user',
+    children: [
+      {
+        name: 'AA列表',
+        path: '/article'
+      },
+      {
+        name: 'AA配置',
+        path: '/article-setting'
+      }
+    ]
+  },
+  {
+    name: 'BB管理',
+    icon: 'upload',
+    key: 'upload',
+    children: [
+      {
+        name: 'BB列表',
+        path: '/upload-list'
+      },
+      {
+        name: 'BB配置',
+        path: '/upload-setting'
+      }
+    ]
+  }
+];
 
 export default class App extends React.Component {
   render() {
@@ -17,7 +51,10 @@ export default class App extends React.Component {
           }}
         >
           <div className="logo" />
+          {/* <SideMenu menuData={menuData} /> */}
+
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+            {/* <SideMenu menuData={menuData} /> */}
             <Menu.Item key="1">
               <Link to={'/'}>
                 <Icon type="user" />

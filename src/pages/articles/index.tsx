@@ -1,42 +1,61 @@
 import React, { Component } from 'react';
-import { Table, Divider, Tag, Button } from 'antd';
+import { Table, Button, Tag, Divider, message } from 'antd';
 import { Link } from 'react-router-dom';
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer']
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser']
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  }
-];
+import axios from 'axios';
 
 export default class Articles extends Component {
+  state = {
+    data: []
+  };
   columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: text => <a>{text}</a>
+      title: '文章名称',
+      dataIndex: 'title'
+    },
+    {
+      title: '标签',
+      dataIndex: 'tag_name',
+      render: (text: Array<string>) =>
+        text.map((i: string) => <Tag color="#108ee9">{i}</Tag>)
+    },
+    {
+      title: '分类',
+      dataIndex: 'type_name',
+      render: (text: Array<string>) =>
+        text.map((i: string) => <Tag color="#108ee9">{i}</Tag>)
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'create_time'
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'update_time'
+    },
+    {
+      title: '操作',
+      render: (t: any, r: any) => (
+        <>
+          <Link to={`/add-article/${r.id}`}>编辑</Link>
+          <Divider type="vertical" />
+          <a href="javascript:;" onClick={() => this.del(r.id)}>
+            删除
+          </a>
+        </>
+      )
     }
   ];
 
+  async componentDidMount() {
+    const res = await axios.get('/article');
+    this.setState({
+      data: res
+    });
+  }
+
   render() {
+    const { data } = this.state;
+
     return (
       <div>
         <Link to="/add-article">
@@ -46,4 +65,14 @@ export default class Articles extends Component {
       </div>
     );
   }
+
+  del = id => {
+    axios.delete(`/article/${id}`).then(async () => {
+      message.success('删除成功');
+      const res = await axios.get('/article');
+      this.setState({
+        data: res
+      });
+    });
+  };
 }

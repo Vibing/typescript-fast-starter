@@ -1,6 +1,6 @@
 import './style.less';
 import React, { Component } from 'react';
-import { Form, Input, Select, Button } from 'antd';
+import { Form, Input, Select, Button, message } from 'antd';
 import axios from 'axios';
 import { Remarkable } from 'remarkable';
 import * as hljs from 'highlight.js'; // https://highlightjs.org/
@@ -15,7 +15,9 @@ const formItemLayout = {
 class RegistrationForm extends React.Component<any, any> {
   state = {
     tags: [],
-    types: []
+    types: [],
+    editData: {},
+    isEdit: false
   };
 
   md = new Remarkable({
@@ -36,6 +38,22 @@ class RegistrationForm extends React.Component<any, any> {
   preview: any;
 
   componentDidMount() {
+    const { id } = this.props.match.params;
+
+    if (id) {
+      this.setState({
+        isEdit: true
+      });
+    }
+
+    axios.get(`/article/${id}`).then(res => {
+      console.log(res);
+
+      this.setState({
+        editData: res
+      });
+    });
+
     axios.get('/tag').then(res => {
       this.setState({
         tags: res
@@ -50,31 +68,29 @@ class RegistrationForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { tags, types } = this.state;
+    const { tags, types, isEdit, editData } = this.state;
 
     return (
       <div className="add-container">
         <Form onSubmit={this.handleSubmit} style={{ width: 500 }}>
           <Form.Item {...formItemLayout} label="标题">
-            {getFieldDecorator('title', {})(<Input />)}
+            {getFieldDecorator('title', {
+              initialValue: isEdit ? editData.title : ''
+            })(<Input />)}
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="所属标签">
-            {getFieldDecorator('tag_id')(
+            {getFieldDecorator('tag_id', {
+              initialValue: isEdit ? editData.tag_id : []
+            })(
               <Select
                 allowClear
-                placeholder="请选择文章标签"
+                placeholder="请选择分类"
                 showSearch
                 mode="multiple"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.props.children
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
               >
                 {tags.map((i: any) => (
-                  <Option key={1} value={i.id}>
+                  <Option key={1} value={`${i.id}`}>
                     {i.tag_name}
                   </Option>
                 ))}
@@ -83,21 +99,17 @@ class RegistrationForm extends React.Component<any, any> {
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="文章分类">
-            {getFieldDecorator('type_id')(
+            {getFieldDecorator('type_id', {
+              initialValue: isEdit ? editData.type_id : []
+            })(
               <Select
                 allowClear
                 placeholder="请选择分类"
                 showSearch
                 mode="multiple"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  option.props.children
-                    .toLowerCase()
-                    .indexOf(input.toLowerCase()) >= 0
-                }
               >
                 {types.map((i: any) => (
-                  <Option key={1} value={i.id}>
+                  <Option key={i.id} value={`${i.id}`}>
                     {i.type_name}
                   </Option>
                 ))}
@@ -106,15 +118,21 @@ class RegistrationForm extends React.Component<any, any> {
           </Form.Item>
 
           <Form.Item {...formItemLayout} label="内容">
-            {getFieldDecorator('content', {})(<Input.TextArea />)}
+            {getFieldDecorator('content', {
+              initialValue: isEdit ? editData.content : ''
+            })(<Input.TextArea />)}
           </Form.Item>
 
           <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
             <Button type="primary" htmlType="submit">
-              添加
+              保存
             </Button>
 
-            <Button type="primary" onClick={this.previewContent}>
+            <Button
+              style={{ marginLeft: 20 }}
+              type="primary"
+              onClick={this.previewContent}
+            >
               预览
             </Button>
           </Form.Item>
@@ -128,18 +146,30 @@ class RegistrationForm extends React.Component<any, any> {
   }
 
   handleSubmit = e => {
+    const { isEdit } = this.state;
+    const { id } = this.props.match.params;
+
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
       }
-
-      this.createArticle(values);
+      isEdit ? this.updateArticle(id, values) : this.createArticle(values);
     });
   };
 
   createArticle = async (values: any) => {
     await axios.post('/article', values);
+    message.success('保存成功');
+  };
+
+  updateArticle = async (id: string, values: any) => {
+    try {
+      await axios.put(`/article/${id}`, values);
+      message.success('更新成功');
+    } catch (error) {
+      message.success('更新失败');
+    }
   };
 
   previewContent = () => {
