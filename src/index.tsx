@@ -13,7 +13,7 @@ import routes from './routes';
 import axios from 'axios';
 
 /* axios公共配置 */
-axios.defaults.baseURL = 'http://localhost:8080/'; //请求baseUrl
+axios.defaults.baseURL = __BASE_URL__; //请求baseUrl
 axios.defaults.timeout = 60000; //设置超时时间
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.post['Content-Type'] =

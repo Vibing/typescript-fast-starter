@@ -61,7 +61,7 @@ export default class App extends React.Component {
                 文章
               </Link>
             </Menu.Item>
-            <Menu.Item key="2">
+            {/* <Menu.Item key="2">
               <Icon type="video-camera" />
               <span className="nav-text">nav 2</span>
             </Menu.Item>
@@ -88,7 +88,7 @@ export default class App extends React.Component {
             <Menu.Item key="8">
               <Icon type="shop" />
               <span className="nav-text">nav 8</span>
-            </Menu.Item>
+            </Menu.Item> */}
           </Menu>
         </Sider>
         <Layout style={{ marginLeft: 200 }}>

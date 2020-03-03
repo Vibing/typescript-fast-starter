@@ -34,7 +34,26 @@ export default {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        include: [/github-markdown-css/, /highlight.js/]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true
+            }
+          }
+        ],
+        include: [path.resolve(__dirname, '../node_modules/antd')]
       },
       {
         test: /\.less$/,
@@ -66,27 +85,27 @@ export default {
       }
     ]
   },
-  // optimization: {
-  //   nodeEnv: 'production',
-  //   mergeDuplicateChunks: true, //合并包含相同模块的块
-  //   minimize: true,
-  //   minimizer: [
-  //     new TerserPlugin({
-  //       parallel: true,
-  //       extractComments: true
-  //     })
-  //   ],
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       styles: {
-  //         name: 'styles',
-  //         test: /\.css$/,
-  //         chunks: 'all',
-  //         enforce: true
-  //       }
-  //     }
-  //   }
-  // },
+  optimization: {
+    nodeEnv: 'production',
+    mergeDuplicateChunks: true, //合并包含相同模块的块
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        extractComments: true
+      })
+    ],
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'bundle-[name]-[hash].css'
@@ -106,12 +125,13 @@ export default {
       canPrint: true
     }),
     new webpack.DefinePlugin({
-      __DEV__: false
+      __DEV__: false,
+      __BASE_URL__: JSON.stringify('http://admin.chenlong666.cn/')
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../src/index.ejs'),
       templateParameters: {
-        title: 'test'
+        title: '博客后台'
       }
     }),
     new webpack.DllReferencePlugin({

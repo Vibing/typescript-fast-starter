@@ -13,16 +13,10 @@ export default class Articles extends Component {
       dataIndex: 'title'
     },
     {
-      title: '标签',
-      dataIndex: 'tag_name',
-      render: (text: Array<string>) =>
-        text.map((i: string) => <Tag color="#108ee9">{i}</Tag>)
-    },
-    {
       title: '分类',
       dataIndex: 'type_name',
       render: (text: Array<string>) =>
-        text.map((i: string) => <Tag color="#108ee9">{i}</Tag>)
+        text.map((i: string) => <Tag color='#108ee9'>{i}</Tag>)
     },
     {
       title: '创建时间',
@@ -37,8 +31,8 @@ export default class Articles extends Component {
       render: (t: any, r: any) => (
         <>
           <Link to={`/add-article/${r.id}`}>编辑</Link>
-          <Divider type="vertical" />
-          <a href="javascript:;" onClick={() => this.del(r.id)}>
+          <Divider type='vertical' />
+          <a href='javascript:;' onClick={() => this.del(r.id)}>
             删除
           </a>
         </>
@@ -47,7 +41,7 @@ export default class Articles extends Component {
   ];
 
   async componentDidMount() {
-    const res = await axios.get('/article');
+    const res: any = await axios.get('/article');
     this.setState({
       data: res
     });
@@ -58,13 +52,31 @@ export default class Articles extends Component {
 
     return (
       <div>
-        <Link to="/add-article">
-          <Button type="primary">添加文章</Button>
+        <Link to='/add-article'>
+          <Button type='primary'>添加文章</Button>
         </Link>
-        <Table columns={this.columns} dataSource={data} />
+        <Table
+          columns={this.columns}
+          dataSource={data.list}
+          pagination={{
+            total: data.total,
+            onChange: this.pageChange
+          }}
+        />
       </div>
     );
   }
+
+  pageChange = async (page: any) => {
+    const res: any = await axios.get('/article', {
+      params: {
+        page: page - 1
+      }
+    });
+    this.setState({
+      data: res
+    });
+  };
 
   del = id => {
     axios.delete(`/article/${id}`).then(async () => {

@@ -33,7 +33,8 @@ export default {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
+        include: [/github-markdown-css/, /highlight.js/]
       },
       {
         test: /\.less$/,
@@ -51,7 +52,7 @@ export default {
             }
           }
         ],
-        include: path.resolve(__dirname, '../node_modules/antd')
+        include: [path.resolve(__dirname, '../node_modules/antd')]
       },
       {
         test: /\.less$/,
@@ -102,7 +103,7 @@ export default {
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn/),
     new webpack.DefinePlugin({
       __DEV__: true,
-      __BASE_URL__: JSON.stringify('http://127.0.0.1:8080/')
+      __BASE_URL__: JSON.stringify('http://admin.chenlong666.cn/')
     }),
     new webpack.DllReferencePlugin({
       context: __dirname,
